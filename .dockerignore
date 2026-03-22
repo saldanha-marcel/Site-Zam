@@ -5,6 +5,6 @@ dist
 .gitignore
 README.md
 .vscode
-.env.local
-.env.*.local
+.local
+.env
 .DS_Store
