@@ -51,7 +51,7 @@ export function LeadCaptureForm() {
       setIsSubmitted(true);
       reset();
 
-      setTimeout(() => setIsSubmitted(false), 5000);
+      setTimeout(() => setIsSubmitted(false), 25000);
     } catch (err) {
       console.error('Falha ao enviar lead:', err);
       alert(`Falha ao enviar lead: ${err.message}`);
@@ -65,12 +65,29 @@ export function LeadCaptureForm() {
           <div className="inline-flex items-center justify-center size-20 rounded-full mb-6" style={{ backgroundColor: '#9FE63E' }}>
             <CheckCircle2 className="size-10 text-black" />
           </div>
-          <h2 className="text-3xl mb-4" style={{ color: '#9FE63E' }}>Bem-vindo ao time!</h2>
-          <p className="text-lg text-white mb-2">
-            Seus dados foram recebidos com sucesso!
+          <h2 className="text-3xl md:text-4xl mb-4" style={{ color: '#9FE63E', fontWeight: 900 }}>
+            🎉 BEM-VINDO AO TIME!
+          </h2>
+          <p className="text-xl md:text-2xl text-white mb-4" style={{ fontWeight: 600 }}>
+            Você está a um passo de destravar seu potencial!
           </p>
-          <p className="text-gray-300">
-            Em breve você receberá todas as informações sobre o <strong>DESTRAVA 21Z</strong>.
+          <p className="text-base md:text-lg text-gray-300 mb-6 max-w-lg mx-auto leading-relaxed">
+            Parabéns por dar esse passo importante! Agora você faz parte de um time que não para de evoluir. 
+            Entre no nosso grupo exclusivo do WhatsApp para receber todas as novidades sobre o <span style={{ color: '#9FE63E', fontWeight: 700 }}>DESTRAVA 21Z</span> em primeira mão!
+          </p>
+          
+          <a 
+            href="https://chat.whatsapp.com/BopncjvofPuK0hVdDpSOQK?mode=gi_t" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-block w-full md:w-auto px-8 py-4 rounded-lg text-lg text-black transition-all hover:scale-105"
+            style={{ backgroundColor: '#9FE63E', fontWeight: 700 }}
+          >
+            📲 ACESSAR GRUPO NO WHATSAPP
+          </a>
+          
+          <p className="text-sm text-gray-400 mt-6">
+            Nos vemos lá! 💪
           </p>
         </div>
       </div>
