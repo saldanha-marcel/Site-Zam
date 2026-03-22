@@ -17,14 +17,45 @@ export function LeadCaptureForm() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log('Lead capturado:', data);
-    setIsSubmitted(true);
-    reset();
-    
-    // Reset success message after 5 seconds
-    setTimeout(() => setIsSubmitted(false), 5000);
+    setIsSubmitted(false);
+
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+    const payload = {
+      nome: data.name,
+      idade: Number(data.age),
+      cidade: data.city,
+      telefone: data.phone,
+      email: data.email,
+      objetivo: data.goal,
+    };
+
+    try {
+
+      const response = await fetch(`${apiUrl}/leads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Erro ao enviar lead');
+      }
+
+      const result = await response.json();
+      console.log('Lead capturado:', result);
+
+      setIsSubmitted(true);
+      reset();
+
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } catch (err) {
+      console.error('Falha ao enviar lead:', err);
+      alert(`Falha ao enviar lead: ${err.message}`);
+    }
   };
 
   if (isSubmitted) {
