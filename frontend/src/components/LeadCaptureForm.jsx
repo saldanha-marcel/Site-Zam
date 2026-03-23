@@ -6,6 +6,8 @@ import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { CheckCircle2 } from 'lucide-react';
 
+const WHATSAPP_GROUP_URL = 'https://chat.whatsapp.com/BopncjvofPuK0hVdDpSOQK?mode=gi_t';
+
 export function LeadCaptureForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const {
@@ -30,14 +32,17 @@ export function LeadCaptureForm() {
       objetivo: data.goal,
     };
 
-    try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
+    try {
       const response = await fetch(`${apiUrl}/leads`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -54,8 +59,18 @@ export function LeadCaptureForm() {
       setTimeout(() => setIsSubmitted(false), 25000);
     } catch (err) {
       console.error('Falha ao enviar lead:', err);
-      alert(`Falha ao enviar lead: ${err.message}`);
+      const message =
+        err.name === 'AbortError'
+          ? 'A requisição demorou demais para responder. Verifique a API e tente novamente.'
+          : err.message;
+      alert(`Falha ao enviar lead: ${message}`);
+    } finally {
+      clearTimeout(timeoutId);
     }
+  };
+
+  const handleOpenGroupLink = () => {
+    window.open(WHATSAPP_GROUP_URL, '_blank', 'noopener,noreferrer');
   };
 
   if (isSubmitted) {
@@ -75,17 +90,20 @@ export function LeadCaptureForm() {
             Parabéns por dar esse passo importante! Agora você faz parte de um time que não para de evoluir. 
             Entre no nosso grupo exclusivo do WhatsApp para receber todas as novidades sobre o <span style={{ color: '#9FE63E', fontWeight: 700 }}>DESTRAVA 21Z</span> em primeira mão!
           </p>
-          
-          <a 
-            href="https://chat.whatsapp.com/BopncjvofPuK0hVdDpSOQK?mode=gi_t" 
-            target="_blank" 
-            rel="noopener noreferrer"
+
+          <button
+            type="button"
+            onClick={handleOpenGroupLink}
             className="inline-block w-full md:w-auto px-8 py-4 rounded-lg text-lg text-black transition-all hover:scale-105"
             style={{ backgroundColor: '#9FE63E', fontWeight: 700 }}
           >
-            📲 ACESSAR GRUPO NO WHATSAPP
-          </a>
-          
+            ABRIR GRUPO EM OUTRA ABA
+          </button>
+
+          <p className="text-sm text-gray-300 mt-4 max-w-md mx-auto leading-relaxed">
+            O link será aberto em outra aba do navegador. Se o celular ainda perguntar sobre acessar outro aplicativo, isso vem do próprio sistema ao detectar um link do WhatsApp.
+          </p>
+
           <p className="text-sm text-gray-400 mt-6">
             Nos vemos lá! 💪
           </p>
