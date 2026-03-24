@@ -10,6 +10,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+ALLOWED_ORIGINS = [
+    "https://zam.tldeducacao.com.br",
+    "https://www.zam.tldeducacao.com.br",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
 # Database configuration
 DATABASE_URL = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
 engine = create_engine(
@@ -73,6 +80,15 @@ class CreateLeadResponse(BaseModel):
 
 # FastAPI App
 app = FastAPI(title="ZAM API", version="1.0.0")
+
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
 # Dependency
